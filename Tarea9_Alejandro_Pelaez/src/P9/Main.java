@@ -14,8 +14,6 @@ public class Main {
         // Cargar inventario desde archivo
         supermercado.cargarInventarioDesdeArchivo("Productos.txt");
 
-        
-
         double totalVendidoAlimentosBasicosHoy = 0;
         double totalVendidoPrecocinadosHoy = 0;
         double totalVendidoBebidasHoy = 0;
@@ -26,8 +24,8 @@ public class Main {
 
         int opcion;
         boolean atenderOtroCliente = true;
-        do {
-        	System.out.println("Productos disponibles en este momento: ");
+        while (atenderOtroCliente) {
+            System.out.println("Productos disponibles en este momento: ");
             supermercado.mostrarProductos();
             System.out.println("\n-- Menú Principal --");
             System.out.println("1. Agregar producto");
@@ -136,7 +134,7 @@ public class Main {
                 default:
                     System.out.println("Opción no válida.");
             }
-        } while (opcion != 0 && atenderOtroCliente);
+        }
 
         // Mostrar totales vendidos
         System.out.println("\nTotales vendidos hoy:");
