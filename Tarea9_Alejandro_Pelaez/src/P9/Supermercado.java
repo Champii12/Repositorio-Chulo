@@ -162,11 +162,33 @@ public class Supermercado {
         System.out.println("TOTAL: " + total);
         return total;
     }
+    
+    public void actualizarTotalVendidoMes(double total) {
+        this.totalVendidoMes += total;
+    }
+
+    public void guardarTotalVendidoMesEnArchivo(String nombreArchivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
+            bw.write(Double.toString(totalVendidoMes));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void cargarTotalVendidoMesDesdeArchivo(String nombreArchivo) {
+        try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+            String linea = br.readLine();
+            if (linea != null) {
+                totalVendidoMes = Double.parseDouble(linea);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	public void agregarProd(Producto prod) {
 		inventario.add(prod);
 	}
-	
 	
     public static List<Producto> getInventario() {
 		return inventario;
@@ -195,7 +217,4 @@ public class Supermercado {
 	public double getTotalVendidoMes() {
 		return totalVendidoMes;
 	}
-
-	
-	
 }
