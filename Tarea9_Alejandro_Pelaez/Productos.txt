@@ -1,0 +1,4 @@
+Aceite,4.35,24,Alimento Básico
+Azucar,0.95,50,Alimento Básico
+Champú,2.5,38,Higiene
+Pepsi,1.1,40,Bebida
