@@ -13,6 +13,8 @@ public class Main {
 
         // Cargar inventario desde archivo
         supermercado.cargarInventarioDesdeArchivo("Productos.txt");
+        
+        supermercado.cargarTotalVendidoMesDesdeArchivo("Ganancias.txt");
 
         double totalVendidoAlimentosBasicosHoy = 0;
         double totalVendidoPrecocinadosHoy = 0;
@@ -20,7 +22,7 @@ public class Main {
         double totalVendidoHigieneHoy = 0;
         double totalVendidoLimpiezaHoy = 0;
         double totalVendidoHoy = 0;
-        double totalVendidoMes = 0;
+        double totalVendidoMes = supermercado.getTotalVendidoMes();
 
         int opcion;
         boolean atenderOtroCliente = true;
@@ -98,6 +100,7 @@ public class Main {
 
                     // Actualizar totales vendidos
                     totalVendidoHoy += totalCompra;
+                    totalVendidoMes += totalCompra;
                     for (Producto producto : listaCompra) {
                         switch (producto.getCategoria()) {
                             case "Alimento Básico":
@@ -148,5 +151,8 @@ public class Main {
 
         // Guardar inventario en archivo
         supermercado.guardarInventarioEnArchivo("Productos.txt");
+        
+        supermercado.guardarTotalVendidoMesEnArchivo("Ganancias.txt");
+        scanner.close();
     }
 }
