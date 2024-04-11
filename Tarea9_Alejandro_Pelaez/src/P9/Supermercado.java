@@ -136,7 +136,9 @@ public class Supermercado {
                 System.out.println(producto.getNombre() + "       " + producto.getPrecio() +
                         "       " + producto.getCategoria() + "       " + producto.getStock() +
                         "       " + String.format("%.2f", subtotal));
-
+                
+                productoEnStock.setStock(productoEnStock.getStock() - producto.getStock());
+                
                 switch (producto.getCategoria()) {
                     case "Alimento Básico":
                         totalVendidoAlimentosBasicosHoy += subtotal;
@@ -163,6 +165,8 @@ public class Supermercado {
             }
         }
         actualizarTotalVendidoMes(total);
+     // Guardar el inventario actualizado en el archivo
+        guardarInventarioEnArchivo("Productos.txt");
         System.out.println("--------------------------------------------------");
         System.out.println("TOTAL: " + total);
         return total;
@@ -234,6 +238,4 @@ public class Supermercado {
     public void agregarProd(Producto prod) {
         inventario.add(prod);
     }
-    
-    // MÉTODOS GETTER Y SETTER PARA EL INVENTARIO
 }
