@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Supermercado {
 
-	private static List<Producto> inventario;
-
-	private double totalVendidoAlimentosBasicosHoy;
+    // VARIABLES DE INSTANCIA PARA EL INVENTARIO Y LOS TOTALES VENDIDOS
+    private static List<Producto> inventario;
+    private double totalVendidoAlimentosBasicosHoy;
     private double totalVendidoPrecocinadosHoy;
     private double totalVendidoBebidasHoy;
     private double totalVendidoHigieneHoy;
@@ -16,6 +16,7 @@ public class Supermercado {
     private double totalVendidoHoy;
     private double totalVendidoMes;
 
+    // CONSTRUCTOR PARA INICIALIZAR EL INVENTARIO Y LOS TOTALES VENDIDOS
     public Supermercado() {
         inventario = new ArrayList<>();
         totalVendidoAlimentosBasicosHoy = 0;
@@ -26,8 +27,9 @@ public class Supermercado {
         totalVendidoHoy = 0;
         totalVendidoMes = 0;
     }
-	
-	public void cargarInventarioDesdeArchivo(String nombreArchivo) {
+    
+    // MÉTODO PARA CARGAR EL INVENTARIO DESDE UN ARCHIVO
+    public void cargarInventarioDesdeArchivo(String nombreArchivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -35,7 +37,7 @@ public class Supermercado {
                 String nombre = partes[0];
                 double precio = Double.parseDouble(partes[1]);
                 int stock = Integer.parseInt(partes[2]);
-                String categoria = partes[3]; // nueva lectura para la categoría
+                String categoria = partes[3];
                 Producto producto = null;
                 switch (categoria) {
                     case "Alimento Básico":
@@ -66,9 +68,8 @@ public class Supermercado {
         }
     }
 
-
-
-	public void guardarInventarioEnArchivo(String nombreArchivo) {
+    // MÉTODO PARA GUARDAR EL INVENTARIO EN UN ARCHIVO
+    public void guardarInventarioEnArchivo(String nombreArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
             for (Producto producto : inventario) {
                 bw.write(producto.getNombre() + "," + producto.getPrecio() + "," + producto.getStock() + "," + producto.getCategoria());
@@ -79,6 +80,7 @@ public class Supermercado {
         }
     }
 
+    // MÉTODOS PARA AGREGAR, MODIFICAR Y ELIMINAR PRODUCTOS DEL INVENTARIO
     public void agregarProducto(String nombre, double precio, int stock, String categoria) {
         inventario.add(new Producto(nombre, precio, stock, categoria));
     }
@@ -102,6 +104,7 @@ public class Supermercado {
         }
     }
 
+// MÉTODO PARA BUSCAR UN PRODUCTO EN EL INVENTARIO
     public Producto buscarProducto(String nombre) {
         for (Producto producto : inventario) {
             if (producto.getNombre().equalsIgnoreCase(nombre)) {
@@ -111,6 +114,7 @@ public class Supermercado {
         return null;
     }
 
+// MÉTODO PARA MOSTRAR LOS PRODUCTOS DISPONIBLES
     public void mostrarProductos() {
         System.out.println("Disponemos de los siguientes productos:");
         for (Producto producto : inventario) {
@@ -118,7 +122,7 @@ public class Supermercado {
         }
     }
 
-    // Método para procesar una compra
+// MÉTODO PARA PROCESAR UNA COMPRA
     public double procesarCompra(List<Producto> listaCompra) {
         double total = 0;
         System.out.println("\n-- Compra --");
@@ -127,42 +131,44 @@ public class Supermercado {
         for (Producto producto : listaCompra) {
             Producto productoEnStock = buscarProducto(producto.getNombre());
             if (productoEnStock != null && productoEnStock.getStock() >= producto.getStock()) {
-            	double subtotal = producto.getPrecio() * producto.getStock();
-            	total += subtotal;
-            	System.out.println(producto.getNombre() + "       " + producto.getPrecio() +
-            			"       " + producto.getCategoria() + "       " + producto.getStock() + 
-            			"       " + String.format("%.2f", subtotal));
-            	
-            	switch (producto.getCategoria()) {
-                case "Alimento Básico":
-                    totalVendidoAlimentosBasicosHoy += subtotal;
-                    break;
-                case "Precocinado":
-                    totalVendidoPrecocinadosHoy += subtotal;
-                    break;
-                case "Bebida":
-                    totalVendidoBebidasHoy += subtotal;
-                    break;
-                case "Higiene":
-                    totalVendidoHigieneHoy += subtotal;
-                    break;
-                case "Limpieza":
-                    totalVendidoLimpiezaHoy += subtotal;
-                    break;
-                default:
-                    // Manejar categorías desconocidas si es necesario
-                    break;
-            }
-            	
+                double subtotal = producto.getPrecio() * producto.getStock();
+                total += subtotal;
+                System.out.println(producto.getNombre() + "       " + producto.getPrecio() +
+                        "       " + producto.getCategoria() + "       " + producto.getStock() +
+                        "       " + String.format("%.2f", subtotal));
+
+                switch (producto.getCategoria()) {
+                    case "Alimento Básico":
+                        totalVendidoAlimentosBasicosHoy += subtotal;
+                        break;
+                    case "Precocinado":
+                        totalVendidoPrecocinadosHoy += subtotal;
+                        break;
+                    case "Bebida":
+                        totalVendidoBebidasHoy += subtotal;
+                        break;
+                    case "Higiene":
+                        totalVendidoHigieneHoy += subtotal;
+                        break;
+                    case "Limpieza":
+                        totalVendidoLimpiezaHoy += subtotal;
+                        break;
+                    default:
+                        // Manejar categorías desconocidas si es necesario
+                        break;
+                }
+
             } else {
                 System.out.println("Error: no tenemos suficiente stock de " + producto.getNombre());
             }
         }
+        actualizarTotalVendidoMes(total);
         System.out.println("--------------------------------------------------");
         System.out.println("TOTAL: " + total);
         return total;
     }
-    
+
+// MÉTODOS PARA ACTUALIZAR Y GUARDAR EL TOTAL VENDIDO EN EL MES
     public void actualizarTotalVendidoMes(double total) {
         this.totalVendidoMes += total;
     }
@@ -175,6 +181,7 @@ public class Supermercado {
         }
     }
 
+// MÉTODO PARA CARGAR EL TOTAL VENDIDO EN EL MES DESDE UN ARCHIVO
     public void cargarTotalVendidoMesDesdeArchivo(String nombreArchivo) {
         try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea = br.readLine();
@@ -186,35 +193,47 @@ public class Supermercado {
         }
     }
 
-	public void agregarProd(Producto prod) {
-		inventario.add(prod);
-	}
-	
+    // MÉTODOS GETTER Y SETTER PARA ACCEDER A LOS TOTALES VENDIDOS Y PARA EL INVENTARIO
+    public double getTotalVendidoAlimentosBasicosHoy() {
+        return totalVendidoAlimentosBasicosHoy;
+    }
+
+    public double getTotalVendidoPrecocinadosHoy() {
+        return totalVendidoPrecocinadosHoy;
+    }
+
+    public double getTotalVendidoBebidasHoy() {
+        return totalVendidoBebidasHoy;
+    }
+
+    public double getTotalVendidoHigieneHoy() {
+        return totalVendidoHigieneHoy;
+    }
+
+    public double getTotalVendidoLimpiezaHoy() {
+        return totalVendidoLimpiezaHoy;
+    }
+
+    public double getTotalVendidoHoy() {
+        return totalVendidoHoy;
+    }
+
+    public double getTotalVendidoMes() {
+        return totalVendidoMes;
+    }
+    
     public static List<Producto> getInventario() {
-		return inventario;
-	}
-	public static void setInventario(List<Producto> inventario) {
-		Supermercado.inventario = inventario;
-	}
-	public double getTotalVendidoAlimentosBasicosHoy() {
-		return totalVendidoAlimentosBasicosHoy;
-	}
-	public double getTotalVendidoPrecocinadosHoy() {
-		return totalVendidoPrecocinadosHoy;
-	}
-	public double getTotalVendidoBebidasHoy() {
-		return totalVendidoBebidasHoy;
-	}
-	public double getTotalVendidoHigieneHoy() {
-		return totalVendidoHigieneHoy;
-	}
-	public double getTotalVendidoLimpiezaHoy() {
-		return totalVendidoLimpiezaHoy;
-	}
-	public double getTotalVendidoHoy() {
-		return totalVendidoHoy;
-	}
-	public double getTotalVendidoMes() {
-		return totalVendidoMes;
-	}
+        return inventario;
+    }
+
+    public static void setInventario(List<Producto> inventario) {
+        Supermercado.inventario = inventario;
+    }
+
+    // MÉTODO PARA AGREGAR UN PRODUCTO AL INVENTARIO
+    public void agregarProd(Producto prod) {
+        inventario.add(prod);
+    }
+    
+    // MÉTODOS GETTER Y SETTER PARA EL INVENTARIO
 }
